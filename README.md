@@ -13,7 +13,8 @@ Plataforma de investigación de inversiones **AI-native** (demostración de inge
 | Backend, API, worker, LangGraph | **Planificado** — Fase B+ |
 | Frontend (Next.js / vinext) | **Planificado** — debate Tipo 1 pendiente |
 | Floci, PostgreSQL, SQS, S3 | **Planificado** — M3 |
-| LangSmith, Langfuse | **Planificado** — obligatorios; **cómo** en local/nube por debatir |
+| LangSmith, Langfuse | **Planificado** — **nube** (ADR-001); cuentas/API keys pendientes |
+| LLM (demo) | **Planificado** — OpenRouter tier gratuito (ADR-001) |
 | CI (`make test`, GitHub Actions) | **Planificado** |
 | Diagramas de arquitectura en README (Sección 17 del master prompt) | **Planificado** — tras debates Tipo 1 y primer corte vertical |
 

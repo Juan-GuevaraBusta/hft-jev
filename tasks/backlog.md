@@ -15,13 +15,18 @@
 | M5 | Evals + Langfuse (+ Jev opcional) | TODO |
 | M6 | CI, README arquitectura completo, demo | TODO |
 
-## Decisiones Tipo 1 pendientes (no cerradas)
+## Decisiones Tipo 1
 
-- Observabilidad: LangSmith / Langfuse — nube vs self-hosted; qué datos salen de la máquina.
+### Cerradas (ADR)
+
+- **LLM + observabilidad (nube):** OpenRouter + LangSmith Cloud + Langfuse Cloud — [ADR-001](../docs/architecture-decisions/ADR-001-llm-openrouter-observability-cloud.md) (2026-10-09).
+
+### Pendientes (no cerradas)
+
 - Servicios AWS del diseño vs emulación Floci vs contenedores propios.
 - Cola + worker vs alternativa más simple para MVP.
 - Cantidad de agentes vs funciones deterministas.
-- LLM demo: OpenRouter tier gratuito (límites y privacidad por verificar).
+- Spike OpenRouter free: modelos, límites y privacidad (ejecución pendiente).
 - Frontend: vinext vs alternativas; Cloudflare (descartado / opcional / solo local).
 - Herramienta IaC (Pulumi, Terraform, CDK, etc.) compatible con Floci.
 - Jev (TypeSafe AI): opcional tras verificar API.
