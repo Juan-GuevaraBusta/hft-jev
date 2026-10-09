@@ -33,9 +33,9 @@
 | ID | Título | Estado | Complejidad | Notas |
 |----|--------|--------|-------------|-------|
 | M0-01 | Bootstrap repo (master prompt, skills) | DONE | S | PR #1 |
-| M0-02 | README mínimo, `.gitignore`, backlog esqueleto | IN_PROGRESS | S | PR-002 |
-| M0-03 | Diagnóstico entorno local (Python, Node, Docker, Git) | TODO | S | Fase A §23.2 |
-| M0-04 | Verificación docs: Floci, LangSmith, Langfuse, LangGraph, vinext, IaC, Jev | TODO | M | Fase A §23.3 |
+| M0-02 | README mínimo, `.gitignore`, backlog esqueleto | DONE | S | PR #2 |
+| M0-03 | Diagnóstico entorno local (Python 3.12, Node, Docker, Git) | DONE | S | Informe en chat + §2 del doc de verificación |
+| M0-04 | Verificación docs: Floci, LangSmith, Langfuse, LangGraph, vinext, IaC, Jev | DONE | M | `docs/verification-fase-a-official-sources.md` (PR-003) |
 | M0-05 | Debates Tipo 1 + orden aprobado | TODO | L | Fase A §23.4–5 |
 | M0-06 | Plan MVP + roadmap PRs (3 entregas) | TODO | L | Fase A §23.6 |
 | M0-07 | `pyproject.toml`, Ruff, pytest, Makefile mínimo | TODO | M | Tras plan aprobado |
