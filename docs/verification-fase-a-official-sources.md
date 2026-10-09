@@ -196,8 +196,9 @@ No verificado en profundidad en este informe (pendiente spike): límites del tie
 | Obligatorio | Opciones documentadas | Recomendación pre-debate |
 |-------------|----------------------|---------------------------|
 | LangGraph | Postgres checkpointer + grafo explícito | PostgresSaver + PG en Compose |
-| LangSmith | SaaS Developer vs self-host con licencia | SaaS para MVP (cuenta pendiente) |
-| Langfuse | Cloud Hobby vs Docker local | Self-host si quieres 0 egress; Cloud si quieres menos RAM local |
+| LangSmith | SaaS Developer vs self-host con licencia | **Decidido:** SaaS — ver ADR-001 |
+| Langfuse | Cloud Hobby vs Docker local | **Decidido:** Cloud — ver ADR-001 |
+| LLM demo | OpenRouter / local / mock | **Decidido:** OpenRouter (tier free) — ver ADR-001 |
 | AWS diseño | Floci + contenedores propios | SQS/S3 Floci; PG app en contenedor dedicado |
 | Frontend | vinext local vs Next estándar | vinext si aceptas riesgo madurez |
 
