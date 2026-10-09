@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "skills": {
+    "advanced-evaluation": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/advanced-evaluation/SKILL.md",
+      "computedHash": "858102d2f604e4eb9c0904b78664d0a86146bfea7a2f43db1f63473964926e14"
+    },
+    "bdi-mental-states": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/bdi-mental-states/SKILL.md",
+      "computedHash": "a7fce3f628cc4714589c5a242842d546b8bba1d1dec215522c4bd25a7327b4b4"
+    },
+    "context-compression": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/context-compression/SKILL.md",
+      "computedHash": "34637ce388c2e61fa4b9b0cdbb719d67f46853322b0e2c75796306c70f3affa3"
+    },
+    "context-degradation": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/context-degradation/SKILL.md",
+      "computedHash": "f8d161a299d4ae6de5516125ac5063f241a179c49b6905427fe6ccafac18310b"
+    },
+    "context-fundamentals": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/context-fundamentals/SKILL.md",
+      "computedHash": "4a341b2378746f40316eb29448ac1b7db9df8c7074c7d80c09a1ece6513e107c"
+    },
+    "context-optimization": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/context-optimization/SKILL.md",
+      "computedHash": "8f88a8b9aa7e78d0e8bae571ff452dec0c037f8c20275540d396291aeea43606"
+    },
+    "evaluation": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/evaluation/SKILL.md",
+      "computedHash": "b826900db3894e2ba976ae7f05d8d02e8e944695496c0f13cbe027299507a8d3"
+    },
+    "filesystem-context": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/filesystem-context/SKILL.md",
+      "computedHash": "252934028fb6d7e76b96eb2d27324006918affe12b6a09439212adcf18833969"
+    },
+    "harness-engineering": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/harness-engineering/SKILL.md",
+      "computedHash": "ff8e6b8dd3d07d0563e646e2bfd00976bf8f406c99382077c55f748d51751e86"
+    },
+    "hosted-agents": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/hosted-agents/SKILL.md",
+      "computedHash": "72b033056feb3cb3c8cda095864ecc436b6b3b5876cb50183034d4c84b8110a6"
+    },
+    "langsmith-custom-apps": {
+      "source": "langchain-ai/langsmith-skills",
+      "sourceType": "github",
+      "skillPath": "config/skills/langsmith-custom-apps/SKILL.md",
+      "computedHash": "7db99b11815590ca0c636606f9687a97833b377390ab32f1b9ee814675696eef"
+    },
+    "langsmith-dataset": {
+      "source": "langchain-ai/langsmith-skills",
+      "sourceType": "github",
+      "skillPath": "config/skills/langsmith-dataset/SKILL.md",
+      "computedHash": "38c4ed7c09f14948243ace1b2e55c9baa356954ce1e17deace33745f443fa79b"
+    },
+    "langsmith-evaluator": {
+      "source": "langchain-ai/langsmith-skills",
+      "sourceType": "github",
+      "skillPath": "config/skills/langsmith-evaluator/SKILL.md",
+      "computedHash": "19c3706c96c069a20f3484742e5c6c013f2e8cc645c58fdcc89b9a79b8fe802f"
+    },
+    "langsmith-online-eval-engineering": {
+      "source": "langchain-ai/langsmith-skills",
+      "sourceType": "github",
+      "skillPath": "config/skills/langsmith-online-eval-engineering/SKILL.md",
+      "computedHash": "6fec34567e0fd779c46a438524ece64a54ed3f3f9b0da70bfc373826fb30b73d"
+    },
+    "langsmith-trace": {
+      "source": "langchain-ai/langsmith-skills",
+      "sourceType": "github",
+      "skillPath": "config/skills/langsmith-trace/SKILL.md",
+      "computedHash": "b450dadea70507f0405c33b8171ee927b221f679e0e9f650d49176e512084cfa"
+    },
+    "latent-briefing": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/latent-briefing/SKILL.md",
+      "computedHash": "9764fcc92f6028353e2e9ffb8b11ab52ad85fa67722e8ef746c38ad1c0b6435d"
+    },
+    "long-horizon-prompting": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/long-horizon-prompting/SKILL.md",
+      "computedHash": "30be03010837799d5bd653cfc12b803f3205aba0f17d14af8c8a32e06dfec8f1"
+    },
+    "memory-systems": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/memory-systems/SKILL.md",
+      "computedHash": "7dc4a0ba6456e277660ab93892fe3fbfe05c80cfbbea637ea23bbc5a4810703f"
+    },
+    "multi-agent-patterns": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/multi-agent-patterns/SKILL.md",
+      "computedHash": "b66e7cd7d4f434e8c8d1ca95207ef1a90033aeaa31f1b46fdf3865bd4faf2a41"
+    },
+    "project-development": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/project-development/SKILL.md",
+      "computedHash": "034bd3ed8210ce7317f24a5d48a6165c3e9a7a6e9dbdc5caa4fc499be8f375be"
+    },
+    "self-improvement-loops": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/self-improvement-loops/SKILL.md",
+      "computedHash": "ab19462289037dfb11fd8286d8472d206fee3c61917c36ac2a074096a16d185f"
+    },
+    "self-managed-context": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/self-managed-context/SKILL.md",
+      "computedHash": "31096c486652fe35e61d7ecd3dcb878f373bae0fb7627762e8d96939497737c4"
+    },
+    "tool-design": {
+      "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "sourceType": "github",
+      "skillPath": "skills/tool-design/SKILL.md",
+      "computedHash": "680d5fb4eaf540b1ac4067a6c4b16be6fe9a73f32423c7c8eeccb73cab6d4982"
+    }
+  }
+}
