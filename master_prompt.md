@@ -108,6 +108,16 @@ Esto aplica a todos los agentes y subagentes:
 - Sin modificar en silencio una especificación aprobada.
 - Sin refactors oportunistas fuera del PR.
 
+### 2.10 Toda operación testeada; si pasa, commit y push automáticos
+
+Cada operación que modifique el repositorio (código, tests, configuración, infraestructura o documentación) termina así:
+
+1. **Testear:** ejecuta los tests, lint y typecheck relevantes al cambio. Si no existe un test aplicable (p. ej. solo documentación), ejecuta la verificación disponible (lint de markdown, build, validación de esquema) y dilo explícitamente.
+2. **Si pasa:** revisa `git diff --staged` en busca de secretos, haz commit (Conventional Commits) y push a la rama de trabajo del PR en curso, **automáticamente y sin pedir confirmación**.
+3. **Si falla:** no commitees ni pushees. Corrige y repite, o reporta el fallo con comando, código de salida y salida relevante (2.7).
+4. **Autoría:** el único autor del commit es el usuario con su cuenta de GitHub. Sin trailers `Co-authored-by` ni atribución a agentes.
+5. Esta regla no relaja 2.2 ni 2.3: no se escribe código antes de la compuerta, nunca se pushea directo a `main`, y las acciones destructivas (force-push, reescribir historial, `git reset --hard`) siguen requiriendo mi confirmación explícita.
+
 ---
 
 ## 3. PROTOCOLO DE PULL REQUESTS
