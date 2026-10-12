@@ -19,6 +19,7 @@ Si hay contradicción entre una sección técnica y las secciones 0 a 4, gana el
 | Arquitectura | **Diseñada para AWS** y **desplegada localmente en Floci** (emulador local de AWS). Nunca se despliega en AWS real. |
 | Entorno | **Todo corre en local.** |
 | Obligatorios | **LangGraph, LangSmith y Langfuse.** |
+| Broker | **Alpaca.** Paper trading en el MVP; dinero real solo más adelante, detrás de un interruptor explícito (ver 5.1 y [ADR-003](./docs/architecture-decisions/ADR-003-broker-alpaca-ejecucion-por-umbrales.md)). |
 | Frontend | Next.js con vinext. La idea original de desplegarlo gratis en Cloudflare queda **en debate**, porque ahora todo corre en local (ver 7.4). |
 | GitHub | Los agentes tienen autorización para crear el repo, ramas, commits, push, PRs y merge, con las salvaguardas de 2.3. |
 
@@ -77,7 +78,7 @@ Salvaguardas:
 - Todo corre en mi máquina. La arquitectura se **diseña para AWS** y se **despliega en Floci**.
 - **Nunca** desplegar en AWS real, ni usar credenciales reales de AWS, ni incurrir en costos de nube. Para Floci usa credenciales ficticias.
 - Pide confirmación antes de instalar software global del sistema (Docker, runtimes, CLIs). Documenta cada instalación.
-- Ninguna operación de inversión se ejecuta jamás.
+- Las operaciones de inversión **solo** se ejecutan a través de Alpaca y según la política de 5.1. En el MVP, solo contra la cuenta de **paper trading**. Operar con dinero real requiere el interruptor explícito de 5.1 y mi confirmación.
 
 ### 2.5 Un PR a la vez
 
@@ -207,7 +208,7 @@ Detecta toda decisión (explícita o implícita) en cada mensaje mío y clasifí
 
 | Tipo | Ejemplos | Tratamiento |
 |---|---|---|
-| **Tipo 1** (difícil de revertir o estructural) | Arquitectura general, uso de LangGraph, estrategia de observabilidad (LangSmith/Langfuse), servicios AWS elegidos y su emulación en Floci, cola/worker, base de datos, contratos públicos, esquema del artefacto, herramienta de IaC, frontend/runtime | **Debate completo de arquitectura** (4.3) con alternativas |
+| **Tipo 1** (difícil de revertir o estructural) | Arquitectura general, uso de LangGraph, estrategia de observabilidad (LangSmith/Langfuse), servicios AWS elegidos y su emulación en Floci, cola/worker, base de datos, contratos públicos, esquema del artefacto, herramienta de IaC, frontend/runtime, broker, cálculo de `decision_score`, umbrales y límites de riesgo, paso a `live` | **Debate completo de arquitectura** (4.3) con alternativas |
 | **Tipo 2** (reversible, local) | Nombres, estructura de carpetas, versión menor, formato de logs | Cuestionamiento breve: 2 a 3 preguntas |
 | **Implícita** | Supuestos que yo no declaré (por ejemplo "asumo que la cola es necesaria") | Haz explícito el supuesto y pregúntame |
 
@@ -366,9 +367,44 @@ La plataforma debe ayudar a responder:
 7. ¿Qué evidencia nueva invalidaría la tesis?
 8. ¿Qué conclusiones debe revisar un humano antes de confiar en ellas?
 
-**Es una demostración de ingeniería creíble, NO un sistema de trading autónomo.** Prohibido: ejecución con dinero real, integración con brokers, órdenes automáticas, promesas de rentabilidad. Todo artefacto debe etiquetarse como **investigación analítica, no asesoría financiera personalizada**.
+**La investigación alimenta la ejecución de órdenes en Alpaca**, bajo la política de decisión por umbrales de 5.1. Prohibido: promesas de rentabilidad, operar con dinero real sin el interruptor explícito de 5.1 y saltarse los límites de riesgo deterministas. Todo artefacto debe etiquetarse como **investigación analítica, no asesoría financiera personalizada**.
 
-La operación supervisada (p. ej. tickets en papel o conexión a broker) queda **fuera del MVP**. El diseño reserva un **ExecutionPort** en estado `disabled` (`execution_status: "disabled"`, `ticket: "NO_TICKET"`). Habilitarlo exige debate Tipo 1, ADR aceptado y enmienda explícita de esta sección y de la §2.4.
+### 5.1 Ejecución con Alpaca y política de decisión por umbrales
+
+Decisión registrada en [ADR-003](./docs/architecture-decisions/ADR-003-broker-alpaca-ejecucion-por-umbrales.md).
+
+**Modos de operación:**
+
+| Modo | Cuenta Alpaca | Cuándo |
+|---|---|---|
+| `paper` | Paper trading (dinero simulado) | Por defecto. Único modo del MVP. |
+| `live` | Cuenta real | Solo tras el interruptor explícito: variable de entorno dedicada, confirmación mía y criterios de 5.1 cumplidos. |
+
+El modo se elige por configuración, nunca por decisión de un LLM. Si la configuración es ambigua o falta, el sistema arranca en `paper`.
+
+**Calificación de la orden propuesta.** Cada orden propuesta recibe una calificación (`decision_score`) entre 0 y 1. Se calcula con código determinista a partir de los resultados de la verificación (sección 10), la calidad de la evidencia y la salida estructurada de los agentes. Debe ser reproducible y testeable.
+
+**Enrutamiento por umbrales** (valores configurables, `reject_threshold` < `auto_threshold`):
+
+| Calificación | Acción |
+|---|---|
+| `decision_score` ≥ `auto_threshold` | El sistema envía la orden a Alpaca sin esperar aprobación. |
+| `reject_threshold` ≤ `decision_score` < `auto_threshold` | La orden queda pendiente hasta mi aprobación o rechazo explícito. |
+| `decision_score` < `reject_threshold` | La orden se rechaza y se registra el motivo. |
+
+**Controles que nunca se saltan**, sea cual sea la calificación:
+
+- Una verificación fallida (sección 10) nunca produce una orden enviada.
+- Límites de riesgo deterministas: tamaño máximo por orden, exposición máxima por activo, pérdida diaria máxima y número máximo de órdenes por día. Si una orden los excede, se rechaza.
+- Interruptor de parada (kill switch) que bloquea todo envío de órdenes.
+- Universo de activos permitido, definido de forma explícita.
+- Idempotencia: un reintento nunca duplica una orden (identificador de cliente estable por orden).
+
+**Paso a dinero real.** La zona de envío automático queda **desactivada en `live`** hasta que exista evidencia de calibración de `decision_score` sobre resultados en paper trading. Hasta entonces, en `live` toda orden por encima de `reject_threshold` requiere mi aprobación.
+
+**Trazabilidad.** Cada orden enlaza `research_id`, calificación, umbrales vigentes, ruta tomada (automática, aprobada por mí o rechazada), respuesta de Alpaca y modo (`paper` o `live`).
+
+El **ExecutionPort** es el único punto que habla con Alpaca. Queda habilitado en modo `paper` según esta sección (ADR-003). Cambiar el modo, los umbrales o los límites de riesgo exige debate Tipo 1.
 
 ---
 
@@ -485,7 +521,8 @@ Mantén el alcance acotado y finalizable. El MVP soporta:
 - Varias tareas de investigación especializadas.
 - Tesis estructurada y verificación determinista.
 - Artefacto completado visible en el dashboard.
-- Demo local repetible **sin API de pago**.
+- Orden propuesta con su calificación, enrutada según 5.1 y enviada a Alpaca **en paper trading**.
+- Demo local repetible **sin API de pago**. Los tests de aceptación básicos usan un broker falso identificado como tal; la cuenta paper de Alpaca se usa en integración y demo.
 
 Empezar con **un único corte vertical** funcionando de punta a punta antes de añadir agentes o clases de activos. Fixtures sintéticos o históricos públicos curados para la demo; sin dependencia de proveedores externos para el test de aceptación básico.
 
@@ -506,6 +543,9 @@ Market Event
  → Build Investment Thesis
  → Deterministic Verification
  → PASS: Publish Research Artifact
+ → Propose Order + Deterministic Decision Score
+ → Risk Limits Check
+ → Route: Auto-submit to Alpaca | Await Human Approval | Reject
 
 Verification Failure
  → Classify Failure
@@ -532,7 +572,7 @@ El **primer corte vertical** del MVP sigue siendo un único flujo disparado por 
 
 | Veredicto | Significado |
 |-----------|-------------|
-| `PASS` | Artefacto publicable para revisión humana; **no** autoriza operación ni orden |
+| `PASS` | Artefacto publicable. Permite proponer una orden, que se califica y enruta según 5.1; `PASS` por sí solo no envía nada |
 | `FLAG` | Contradicción material o cifra no verificable; revisión humana obligatoria |
 | `BLOCK` | Incumplimiento de regla de riesgo o política (con regla y aritmética en `verification_results`) |
 | `NEEDS_DATA` | Falta figura, fuente, periodo, cartera o regla configurada; no inferir límites de trades pasados |
@@ -553,7 +593,7 @@ Pueden correr en paralelo donde las dependencias lo permitan. Si una función de
 
 Campos mínimos: `research_id`, `schema_version`, `event`, `event_category`, `created_at`, `as_of_timestamp`, `assets_analyzed`, `executive_summary`, `verified_facts`, `evidence`, `source_references`, `bull_case`, `base_case`, `bear_case`, `assumptions`, `potential_transmission_mechanisms`, `risks`, `contradictions`, `uncertainties`, `invalidation_conditions`, `quantitative_analysis`, `verification_results`, `retry_count`, `review_status`, `execution_status`, `ticket`, `disclaimer`.
 
-En el MVP: `execution_status` debe ser `"disabled"` y `ticket` debe ser `"NO_TICKET"`. No incluir cantidad, side, tipo de orden ni identificador de broker.
+`execution_status` refleja la ruta de 5.1 (por ejemplo `rejected`, `awaiting_approval`, `submitted`, `filled`). Si el veredicto no es `PASS`, `execution_status` es `"disabled"` y `ticket` es `"NO_TICKET"`. Con orden, `ticket` incluye cantidad, side, tipo de orden, `decision_score`, modo (`paper` o `live`) e identificadores de cliente y de Alpaca. El conjunto exacto de estados se define en la spec del PR.
 
 Cada referencia de fuente: identificador estable, URL si existe, fecha de publicación si existe, fecha de recuperación, nombre de la fuente y afirmaciones que respalda. Referencias estructuradas, no URLs sueltas en texto libre.
 
@@ -640,10 +680,11 @@ El núcleo se ejecuta **localmente** con costo incremental previsto de **$0** (e
 - Timeouts y solicitudes externas acotadas; manejo seguro de errores de proveedores.
 - Sin valores secretos en logs.
 - Renderizado seguro de contenido externo no confiable.
-- Separación explícita entre generación de investigación y cualquier sistema futuro de trading.
+- Separación explícita entre generación de investigación y ejecución de órdenes: el LLM nunca llama a Alpaca directamente. Solo el módulo de ejecución determinista envía órdenes, tras los controles de 5.1.
+- Claves de Alpaca solo por variables de entorno, separadas para paper y live, y nunca expuestas al frontend.
 - Sin ejecución arbitraria de código controlada por el LLM.
 - Sin publicación automática de investigación no verificada como validada.
-- Documento de modelo de amenazas: inyección de prompts desde fuentes, evidencia fabricada, fallos de proveedores de datos, filtración de secretos, mensajes duplicados en cola, exceso de llamadas al modelo, envío de datos a servicios externos de observabilidad (LangSmith o Langfuse en la nube, si se eligen) y agentes autónomos con permisos de escritura sobre el repositorio (cambios no revisados, secretos en commits, merges indebidos).
+- Documento de modelo de amenazas: inyección de prompts desde fuentes, evidencia fabricada, fallos de proveedores de datos, filtración de secretos, mensajes duplicados en cola, exceso de llamadas al modelo, envío de datos a servicios externos de observabilidad (LangSmith o Langfuse en la nube, si se eligen), órdenes indebidas o duplicadas en Alpaca, activación accidental del modo `live`, manipulación de la calificación mediante inyección de prompts y agentes autónomos con permisos de escritura sobre el repositorio (cambios no revisados, secretos en commits, merges indebidos).
 
 Antes de cada commit, revisa tú el staging (`git diff --staged`) en busca de secretos y reporta el resultado.
 
@@ -815,7 +856,7 @@ Una tarea es `DONE` solo si:
 11. El dataset de evaluación se ejecuta, produce un reporte local reproducible y **sus resultados quedan registrados en Langfuse**.
 12. La infraestructura diseñada para AWS se despliega en Floci con un comando verificado, y **nunca** se despliega en AWS real.
 13. El README contiene la arquitectura AWS, el mapeo con Floci y refleja el estado real.
-14. Ninguna operación de inversión se ejecuta automáticamente.
+14. Las órdenes se enrutan según 5.1 (envío automático, aprobación humana o rechazo) y se ejecutan solo en paper trading de Alpaca. Los límites de riesgo y el kill switch están testeados.
 15. Superé la compuerta de comprensión en cada PR (o consta la omisión) y puedo explicar el sistema.
 16. El repositorio contiene tareas restantes accionables y limitaciones conocidas.
 
@@ -834,6 +875,7 @@ Puntos de partida, no sustitutos de verificar compatibilidad y comportamiento ac
 - AWS SQS y S3 (comportamiento de referencia para comparar con Floci): https://docs.aws.amazon.com/
 - AWS ECS Fargate (diseño): https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html
 - Pulumi AWS con Python (si sigue en la comparación de IaC): https://www.pulumi.com/docs/iac/get-started/aws/
+- Alpaca Trading API y paper trading: https://docs.alpaca.markets/ (verificar endpoints de paper y live, SDK de Python, límites de uso y horario de mercado).
 - **Por localizar y verificar (no asumas URLs):** documentación oficial de **LangSmith**, opciones de **self-hosting de Langfuse y de LangSmith**, sitio y documentación oficial de **Floci**, **vinext**, **Jev (TypeSafe AI)**.
 
 Registra en el repositorio las fuentes consultadas y las versiones de paquetes relevantes.
@@ -913,6 +955,7 @@ Mensajes breves: qué ejecutaste (comando y código de salida), el resultado rea
 - [ ] ¿Etiqué lo que es mock, sintético, planificado, verificado en Floci o no verificado en AWS real?
 - [ ] ¿Cualquier acción de GitHub respeta 2.3 y pedí confirmación en las acciones destructivas?
 - [ ] ¿Algo de lo que hago toca AWS real o credenciales reales? (Debe ser no.)
+- [ ] ¿Alguna orden puede llegar a Alpaca sin pasar por la verificación, los límites de riesgo y el enrutamiento de 5.1? ¿Algo activa `live` sin mi confirmación? (Debe ser no.)
 - [ ] ¿Estoy ampliando alcance o complejidad que no necesita el MVP?
 - [ ] ¿Respeté el ritmo del debate (un tema, reglas de cierre) para no paralizar el avance?
 - [ ] ¿El README y las specs siguen reflejando la realidad?

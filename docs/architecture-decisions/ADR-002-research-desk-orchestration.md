@@ -25,9 +25,9 @@
 
 1. **Orquestación:** supervisor LangGraph con un prompt por rol en `prompts/agents/` e instrucciones globales en `prompts/orchestration/chief.md`. Rechazar prompt monolítico único y chat multi-bot sin grafo.
 2. **Roles:** mantener los cinco agentes de §9; contrato «Signal Scout» absorbido por **Event Analyst**; no crear agentes Money & Books ni Execution Bot.
-3. **Veredictos del gate:** `PASS`, `FLAG`, `BLOCK`, `NEEDS_DATA`. `PASS` publica artefacto para revisión humana; no autoriza operación.
+3. **Veredictos del gate:** `PASS`, `FLAG`, `BLOCK`, `NEEDS_DATA`. `PASS` publica el artefacto y permite que el ExecutionPort enrute una orden según [ADR-003](./ADR-003-broker-alpaca-ejecucion-por-umbrales.md); por sí solo no envía nada.
 4. **Pluma única:** Thesis Synthesizer redacta `executive_summary` y línea analítica; cita estado estructurado de otros nodos.
-5. **ExecutionPort:** `execution_status: "disabled"`, `ticket: "NO_TICKET"` en todo artefacto MVP. Habilitar ejecución requiere ADR nuevo y enmienda de §2.4 y §5.
+5. **ExecutionPort:** sustituido por [ADR-003](./ADR-003-broker-alpaca-ejecucion-por-umbrales.md). Es código determinista; envía órdenes a Alpaca (paper en el MVP) según `master_prompt.md` §5.1. Si el gate no es `PASS`: `execution_status: "disabled"`, `ticket: "NO_TICKET"`.
 6. **Cartera:** fixture o extracto aportado por el usuario con `as_of`; sin fixture → gate puede devolver `NEEDS_DATA`. Sin lectura bancaria.
 7. **Turnos 24/7:** especificados en `config/desk.example.yaml` (`night_ingest`, `morning_desk`); implementación **después** del primer corte vertical por evento.
 8. **Modelos:** tiers `fast` / `mid` / `strong` con IDs OpenRouter en config; prompts no fijan marcas de modelo; tier vacío → fallo cerrado.

@@ -43,7 +43,7 @@ money_rules:
   max_single_name_exposure_pct: null  # p. ej. 0.05 = 5% del portfolio
   max_new_order_usd: null
   investment_horizon: null  # p. ej. "12-24 months"
-  # Fixture de cartera (MVP): sin Plaid/broker
+  # Fixture de cartera para tests; en integración y demo la cartera sale de la cuenta paper de Alpaca
   portfolio_fixture_path: null  # p. ej. "fixtures/portfolio.demo.json"
   staleness_hours: 24
 
@@ -66,6 +66,16 @@ node_tier_map:
   risk_contradiction: strong
   thesis_synthesizer: strong
 
+# Ejecución en Alpaca (master_prompt.md §5.1, ADR-003)
+# Las claves de Alpaca van solo en variables de entorno, nunca en este archivo.
 execution:
-  status: disabled  # único valor permitido en MVP
-  ticket_default: "NO_TICKET"
+  broker: alpaca
+  mode: paper  # paper | live. Si falta o es ambiguo, se usa paper. live exige interruptor explícito.
+  kill_switch: false  # true bloquea todo envío de órdenes
+  ticket_default: "NO_TICKET"  # cuando el gate no devuelve PASS
+  # Umbrales de decision_score (0-1). null = sin definir: el ExecutionPort falla cerrado.
+  reject_threshold: null
+  auto_threshold: null  # en live, el envío automático queda desactivado hasta calibrar
+  # Límites de riesgo deterministas; se suman a money_rules
+  max_daily_loss_usd: null
+  max_orders_per_day: null

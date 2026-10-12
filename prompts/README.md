@@ -4,7 +4,7 @@ Los prompts de esta carpeta gobiernan la **ejecución** del desk de investigaci�
 
 ## Precedencia
 
-1. `master_prompt.md` — reglas inviolables (sin órdenes, sin brokers en MVP, evidencia honesta).
+1. `master_prompt.md` — reglas inviolables (ejecución solo vía ExecutionPort en Alpaca según §5.1, paper en el MVP, evidencia honesta).
 2. `config/desk.yaml` (copia local de `desk.example.yaml`) — universo, horarios, reglas de riesgo, IDs de modelo OpenRouter por tier.
 3. `prompts/orchestration/chief.md` — orquestación del run (objetivo, orden de fases, veredictos, entrega).
 4. `prompts/agents/*.md` — system prompts por nodo del grafo.
@@ -22,7 +22,7 @@ Si un prompt de agente contradice el chief o el master prompt, gana el nivel sup
 | `agents/thesis_synthesizer.md` | Thesis Synthesizer (pluma única del memo) | `strong` |
 | `orchestration/chief.md` | Instrucciones globales del supervisor / run | — |
 
-Nodos **no** LLM (código): Validate Input, Deterministic Gate, ExecutionPort (`disabled`).
+Nodos **no** LLM (código): Validate Input, Deterministic Gate, ExecutionPort (calificación, límites de riesgo y envío a Alpaca según `master_prompt.md` §5.1).
 
 ## Salida estructurada
 
@@ -32,7 +32,7 @@ Cada agente escribe en el estado del grafo (JSON/Pydantic). El Thesis Synthesize
 
 | Veredicto | Significado |
 |-----------|-------------|
-| `PASS` | Artefacto publicable para revisión humana; **no** autoriza operación |
+| `PASS` | Artefacto publicable. Permite que el ExecutionPort proponga y enrute una orden según §5.1; por sí solo no envía nada |
 | `FLAG` | Contradicción material o cifra no verificable; revisión humana obligatoria |
 | `BLOCK` | Regla de riesgo o política incumplida |
 | `NEEDS_DATA` | Falta figura, fuente, periodo, cartera o regla configurada |

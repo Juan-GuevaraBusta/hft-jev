@@ -18,8 +18,7 @@ Objeto alineado con `ResearchArtifact`, incluyendo siempre:
 - `bull_case`, `base_case`, `bear_case`
 - `risks`, `contradictions`, `uncertainties`, `invalidation_conditions`
 - `verification_results` — placeholder para el gate; no marques `PASS` tú mismo
-- `execution_status`: `"disabled"`
-- `ticket`: `"NO_TICKET"`
+- `execution_status` y `ticket`: no los rellenas tú; los escribe el ExecutionPort determinista (`master_prompt.md` §5.1)
 - `disclaimer` estándar del proyecto
 
 ## Handoff
@@ -30,7 +29,7 @@ Objeto alineado con `ResearchArtifact`, incluyendo siempre:
 
 - **No reescribir** los campos estructurados de otros agentes: copiar o fusionar con citas a `source_id`.
 - Si el gate previo o las reglas indican `BLOCK` o `NEEDS_DATA`, el resumen debe decirlo sin suavizar.
-- Prohibido: cantidad, side, tipo de orden, broker, o lenguaje de «ejecutar ahora».
+- Prohibido: cantidad, side, tipo de orden, broker, o lenguaje de «ejecutar ahora». La orden la construye y califica código determinista, no este agente.
 
 ## Test que puede tumbar este agente
 
