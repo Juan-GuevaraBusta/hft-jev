@@ -9,7 +9,7 @@
 |----|-----------|---------------|
 | M0 | Requisitos, repo, linters, ADRs, verificación docs | **IN_PROGRESS** |
 | M1 | Corte vertical determinista (sin LLM de pago) | TODO |
-| M2 | Arnés LangGraph + LangSmith | TODO |
+| M2 | Arnés LangGraph + LangSmith (cargar `prompts/` y `config/desk.yaml`) | TODO |
 | M3 | Floci (SQS, S3), worker, IaC | TODO |
 | M4 | Dashboard vinext/Next | TODO |
 | M5 | Evals + Langfuse (+ Jev opcional) | TODO |
@@ -45,6 +45,7 @@
 | M0-06 | Plan MVP + roadmap PRs (3 entregas) | TODO | L | Fase A §23.6 |
 | M0-07 | `pyproject.toml`, Ruff, pytest, Makefile mínimo | TODO | M | Tras plan aprobado |
 | M0-08 | ADRs iniciales (plantilla + primeros temas cerrados) | TODO | M | Tras debates |
+| M0-09 | Contrato desk: `prompts/`, `config/desk.example.yaml`, extracto fuentes, ADR-002 (Propuesto), delta §5/§9 | DONE | M | 2026-10-12 |
 
 ### Plantilla de tarea (futuras entradas)
 

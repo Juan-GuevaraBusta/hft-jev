@@ -358,6 +358,8 @@ La plataforma debe ayudar a responder:
 
 **Es una demostración de ingeniería creíble, NO un sistema de trading autónomo.** Prohibido: ejecución con dinero real, integración con brokers, órdenes automáticas, promesas de rentabilidad. Todo artefacto debe etiquetarse como **investigación analítica, no asesoría financiera personalizada**.
 
+La operación supervisada (p. ej. tickets en papel o conexión a broker) queda **fuera del MVP**. El diseño reserva un **ExecutionPort** en estado `disabled` (`execution_status: "disabled"`, `ticket: "NO_TICKET"`). Habilitarlo exige debate Tipo 1, ADR aceptado y enmienda explícita de esta sección y de la §2.4.
+
 ---
 
 ## 6. PRINCIPIOS DE INGENIERÍA INNEGOCIABLES
@@ -507,19 +509,41 @@ Retry limit exceeded / insufficient evidence / critical contradiction
 
 Nodos explícitos, estado tipado, transiciones documentadas y resultados observables. No un único prompt gigante.
 
+Los **prompts de runtime** del grafo viven en `prompts/` (orquestación en `prompts/orchestration/chief.md`, un archivo por agente en `prompts/agents/`). No sustituyen este documento; la configuración operativa del desk (universo, reglas, tiers de modelo) vive en `config/desk.yaml` (plantilla: `config/desk.example.yaml`).
+
+### Turnos 24/7 (especificados, fuera del primer corte vertical)
+
+- **Turno nocturno (ingesta):** recopilar filings y calendario de earnings del universo en almacén de evidencia; no publicar artefacto al usuario.
+- **Turno matutino (desk):** hora configurable en zona `America/New_York` (p. ej. 09:00); rankear novedades y ejecutar el mismo flujo que ante un evento puntual.
+
+El **primer corte vertical** del MVP sigue siendo un único flujo disparado por **un evento de mercado**, ya con estos prompts y el gate determinista.
+
+### Veredictos del Deterministic Gate
+
+| Veredicto | Significado |
+|-----------|-------------|
+| `PASS` | Artefacto publicable para revisión humana; **no** autoriza operación ni orden |
+| `FLAG` | Contradicción material o cifra no verificable; revisión humana obligatoria |
+| `BLOCK` | Incumplimiento de regla de riesgo o política (con regla y aritmética en `verification_results`) |
+| `NEEDS_DATA` | Falta figura, fuente, periodo, cartera o regla configurada; no inferir límites de trades pasados |
+
+El contrato **Signal Scout** (alerta → fuente primaria → `CONFIRMED` / `UNCONFIRMED` / `NO_RELEVANT_NEWS`) es responsabilidad del **Event Analyst**, no un sexto agente.
+
 ### Responsabilidades de los agentes
 
-1. **Event Analyst:** normaliza el evento, determina categoría, extrae afirmaciones verificables, separa hechos de interpretaciones.
+1. **Event Analyst:** normaliza el evento, determina categoría, extrae afirmaciones verificables, separa hechos de interpretaciones; evalúa señales tipo alerta sin tratarlas como instrucción de compra o venta.
 2. **Evidence Researcher:** reúne documentos fuente, extrae afirmaciones y pasajes de respaldo, registra metadatos, identifica evidencia faltante o conflictiva.
 3. **Market Impact Analyst:** mecanismos de transmisión hacia los activos/sector, supuestos causales, efectos de corto vs. largo plazo.
-4. **Risk and Contradiction Analyst:** explicaciones alternativas, riesgos a la baja, contraargumentos, condiciones de invalidación.
-5. **Thesis Synthesizer:** combina hallazgos validados y produce el artefacto final preservando la atribución de fuentes.
+4. **Risk and Contradiction Analyst:** explicaciones alternativas, riesgos a la baja, contraargumentos, condiciones de invalidación (el veredicto `BLOCK`/`PASS` lo emite el gate en código, no el LLM).
+5. **Thesis Synthesizer:** combina hallazgos validados y produce el artefacto final preservando la atribución de fuentes; **única pluma** del `executive_summary` y de la línea analítica para revisión humana, citando el estado estructurado de los demás nodos.
 
 Pueden correr en paralelo donde las dependencias lo permitan. Si una función determinista basta, **no crear un agente**. Cuestióname cada agente que proponga añadir.
 
 ### Esquema de salida: `ResearchArtifact` (Pydantic, versionado)
 
-Campos mínimos: `research_id`, `schema_version`, `event`, `event_category`, `created_at`, `as_of_timestamp`, `assets_analyzed`, `executive_summary`, `verified_facts`, `evidence`, `source_references`, `bull_case`, `base_case`, `bear_case`, `assumptions`, `potential_transmission_mechanisms`, `risks`, `contradictions`, `uncertainties`, `invalidation_conditions`, `quantitative_analysis`, `verification_results`, `retry_count`, `review_status`, `disclaimer`.
+Campos mínimos: `research_id`, `schema_version`, `event`, `event_category`, `created_at`, `as_of_timestamp`, `assets_analyzed`, `executive_summary`, `verified_facts`, `evidence`, `source_references`, `bull_case`, `base_case`, `bear_case`, `assumptions`, `potential_transmission_mechanisms`, `risks`, `contradictions`, `uncertainties`, `invalidation_conditions`, `quantitative_analysis`, `verification_results`, `retry_count`, `review_status`, `execution_status`, `ticket`, `disclaimer`.
+
+En el MVP: `execution_status` debe ser `"disabled"` y `ticket` debe ser `"NO_TICKET"`. No incluir cantidad, side, tipo de orden ni identificador de broker.
 
 Cada referencia de fuente: identificador estable, URL si existe, fecha de publicación si existe, fecha de recuperación, nombre de la fuente y afirmaciones que respalda. Referencias estructuradas, no URLs sueltas en texto libre.
 

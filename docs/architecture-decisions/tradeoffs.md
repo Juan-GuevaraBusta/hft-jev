@@ -24,6 +24,11 @@
 | T-105 | Cola + worker vs algo más simple | Cola + worker (flujo del `master_prompt.md` §12) | Ejecución síncrona o tarea en segundo plano en FastAPI | API no bloquea; reintentos, idempotencia y cola de mensajes fallidos | Más piezas móviles en local | Debate M0-05 | Abierto |
 | T-106 | Herramienta de IaC | Pendiente | Terraform, OpenTofu, CDK (con pruebas oficiales de compatibilidad con Floci); Pulumi (sin suite oficial) | — | — | Debate M0-05 y spike con SQS + S3 | Abierto |
 | T-107 | Frontend | Pendiente (vinext si se acepta el riesgo de madurez) | Next.js estándar; despliegue opcional en Cloudflare | — | — | Debate M0-05 | Abierto |
+| T-108 | Orquestación del desk | Supervisor LangGraph + `prompts/` por rol | Prompt monolítico Claude Code; enjambre multi-bot en chat | Trazas, gate determinista, handoffs estructurados | Más piezas que un solo prompt | Evals demuestran que un agente único iguala calidad a menor costo | Recomendado |
+| T-109 | Veredictos del gate | `PASS`, `FLAG`, `BLOCK`, `NEEDS_DATA` | Solo pass/fail binario; veredictos solo en prosa del LLM | Alineado con playbook GrokBot; `PASS` no implica operar | Más estados que documentar y testear | Usuario exige otro vocabulario | Recomendado |
+| T-110 | Turnos noche / mañana | Tras primer corte vertical (`desk.example.yaml`) | Turnos en MVP día 1 | Ingesta filings sin publicar memo de madrugada | Cron/worker extra; fuera del evento único inicial | Demo exige desk 09:00 ET antes del grafo | Recomendado |
+| T-111 | ExecutionPort | `disabled` + `NO_TICKET` en MVP | Ticket en papel; broker (futuro) | Cumple §5; deja puerto para operación futura supervisada | No demuestra ejecución | ADR explícito + enmienda §2.4/§5 | Recomendado |
+| T-112 | Selección de modelo por nodo | Tiers `fast`/`mid`/`strong` + OpenRouter (ADR-001) | Modelos fijos en texto de prompt (captura 24/7) | Costo controlable; spike único de modelos | Config vacía falla cerrado hasta spike | Tier gratuito insuficiente en evals | Recomendado |
 
 ## 3. Registro de preguntas de arquitectura
 
@@ -34,3 +39,4 @@ Cada pregunta sobre arquitectura se añade aquí, con su respuesta resumida y el
 | 2026-10-12 | ¿El proyecto usa LangSmith, Langfuse y LangChain? Se usará OpenRouter | Sí: LangGraph, LangSmith y Langfuse son obligatorios; LangChain se usa para el cliente LLM (`ChatOpenRouter`). OpenRouter ya está aprobado | T-001, T-002, T-003, T-004 | Decidido |
 | 2026-10-12 | ¿Ya está la arquitectura en Floci para simular uso pesado de AWS? | No. Hay propuesta (SQS + S3 en Floci, PostgreSQL propio) sin ADR ni código. La simulación de carga no está en el MVP | T-101, T-104, T-105, T-106 | Abierto |
 | 2026-10-12 | ¿No haría falta usar Lambda? | No es obligatoria. Se recomienda worker en contenedor por duración, dependencias y checkpointing; Lambda queda opcional | T-102, T-103 | Recomendado |
+| 2026-10-12 | ¿Ajustar arquitectura al desk 24/7 (foto) y al equipo GrokBot (hilo X)? ¿Operar a futuro? | MVP = desk de investigación con grafo §9, prompts en `prompts/`, gate con PASS/FLAG/BLOCK/NEEDS_DATA, ExecutionPort cerrado. Operación futura solo con ADR y aprobación humana por acción; no autorizada ahora | T-108, T-109, T-110, T-111, T-112; [ADR-002](./ADR-002-research-desk-orchestration.md) (Propuesto) | Recomendado |

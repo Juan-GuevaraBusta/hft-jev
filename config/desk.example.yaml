@@ -1,0 +1,71 @@
+# Copiar a desk.yaml (gitignored en implementación) y rellenar.
+# Referencia: prompts/README.md, ADR-002 (propuesto).
+
+desk:
+  name: "hft-jev-research-desk"
+  timezone: "America/New_York"
+
+# Universo y benchmark (demo: lista pequeña y explícita)
+universe:
+  description: "US-listed common stock; market cap > 2B; avg daily volume > 20M (filtro documental — aplicar en adaptador)"
+  symbols:
+    - SPY
+    - NVDA
+  # Alternativa: path a CSV curado
+  # symbols_file: "config/universe.demo.csv"
+
+benchmark: "SPY"
+
+# Turnos 24/7 — fuera del primer corte vertical; cron/worker los usará después
+schedule:
+  night_ingest:
+    enabled: false
+    # Lunes–viernes, ventana orientativa post-cierre (ET)
+    cron: "30 16 * * 1-5"
+    tasks:
+      - sec_filings
+      - earnings_calendar
+  morning_desk:
+    enabled: false
+    local_time: "09:00"
+    combine_night_intel: true
+
+# Límites analíticos del desk (no órdenes)
+desk_limits:
+  max_deep_dives_per_day: 5
+  max_artifacts_for_review_per_day: 3
+  review_horizon_trading_days: 20
+  material_pct_threshold: 0.05
+
+# Money rules — usadas por Deterministic Gate; nunca inferir de trades pasados
+money_rules:
+  minimum_cash_reserve_usd: null  # NEEDS_DATA si null y el gate requiere caja
+  max_single_name_exposure_pct: null  # p. ej. 0.05 = 5% del portfolio
+  max_new_order_usd: null
+  investment_horizon: null  # p. ej. "12-24 months"
+  # Fixture de cartera (MVP): sin Plaid/broker
+  portfolio_fixture_path: null  # p. ej. "fixtures/portfolio.demo.json"
+  staleness_hours: 24
+
+# SEC EDGAR User-Agent (cuando exista adaptador real)
+sec_contact:
+  name: "{{SEC_CONTACT_NAME}}"
+  email: "{{SEC_CONTACT_EMAIL}}"
+
+# Tiers OpenRouter (ADR-001). Vacío = fallo cerrado en ese nodo.
+model_tiers:
+  fast: ""   # p. ej. openrouter model id tras spike M0
+  mid: ""
+  strong: ""
+
+# Mapeo nodo → tier (implementación LangGraph)
+node_tier_map:
+  event_analyst: fast
+  evidence_researcher: mid
+  market_impact: mid
+  risk_contradiction: strong
+  thesis_synthesizer: strong
+
+execution:
+  status: disabled  # único valor permitido en MVP
+  ticket_default: "NO_TICKET"
