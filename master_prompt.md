@@ -67,7 +67,7 @@ Tienes autorización para: crear el repositorio, ramas, commits, push, abrir PRs
 
 Salvaguardas:
 
-- Todo cambio pasa por PR desde una rama (`feat/m<N>-<NN>-<slug>`, `fix/...`, `docs/...`, `chore/...`). Nunca commits directos a `main`, salvo el commit inicial del repo.
+- Proyecto de un solo desarrollador: se permite commit y push directo a `main` para evitar conflictos de merge. Las ramas (`feat/m<N>-<NN>-<slug>`, `fix/...`, `docs/...`, `chore/...`) y los PRs son opcionales; úsalos cuando el cambio sea grande o requiera revisión antes de integrarse.
 - **Merge solo si** los tests, lint y typecheck relevantes **los ejecutaste tú y pasaron**, y el CI (cuando exista) está en verde.
 - **Requieren mi confirmación explícita** las acciones destructivas o fuera del flujo normal: borrar el repositorio, force-push, reescribir historial, cambiar la visibilidad, crear o rotar secretos, saltarse checks o mergear con pruebas rojas o sin ejecutar.
 - Nunca commitees secretos. Revisa el staging (`git diff --staged`) antes de cada commit.
@@ -114,10 +114,10 @@ Esto aplica a todos los agentes y subagentes:
 Cada operación que modifique el repositorio (código, tests, configuración, infraestructura o documentación) termina así:
 
 1. **Testear:** ejecuta los tests, lint y typecheck relevantes al cambio. Si no existe un test aplicable (p. ej. solo documentación), ejecuta la verificación disponible (lint de markdown, build, validación de esquema) y dilo explícitamente.
-2. **Si pasa:** revisa `git diff --staged` en busca de secretos, haz commit (Conventional Commits) y push a la rama de trabajo del PR en curso, **automáticamente y sin pedir confirmación**.
+2. **Si pasa:** revisa `git diff --staged` en busca de secretos, haz commit (Conventional Commits) y push a `main` (o a la rama de trabajo, si el cambio usa una), **automáticamente y sin pedir confirmación**.
 3. **Si falla:** no commitees ni pushees. Corrige y repite, o reporta el fallo con comando, código de salida y salida relevante (2.7).
 4. **Autoría:** el único autor del commit es el usuario con su cuenta de GitHub. Sin trailers `Co-authored-by` ni atribución a agentes.
-5. Esta regla no relaja 2.2 ni 2.3: no se escribe código antes de la compuerta, nunca se pushea directo a `main`, y las acciones destructivas (force-push, reescribir historial, `git reset --hard`) siguen requiriendo mi confirmación explícita.
+5. Esta regla no relaja 2.2 ni 2.3: no se escribe código antes de la compuerta, y las acciones destructivas (force-push, reescribir historial, `git reset --hard`) siguen requiriendo mi confirmación explícita.
 
 ---
 
@@ -142,8 +142,8 @@ Cada operación que modifique el repositorio (código, tests, configuración, in
 | 6. Refactor y calidad | Lint, typecheck y tests completos | Agente |
 | 7. Documentación | Docs, README, ADR si aplica | Agente |
 | 8. Autorrevisión | Revisión crítica del propio diff y checklist | Agente |
-| 9. PR | Rama, push, PR con la descripción de 3.4 y CI | Agente |
-| 10. Merge y cierre | Merge si todo está verde, backlog actualizado, informe, preguntas de consolidación | Agente + yo |
+| 9. Push | Push directo a `main`; o rama + PR con la descripción de 3.4 si el cambio lo amerita | Agente |
+| 10. Cierre | Integrado en `main` con todo en verde, backlog actualizado, informe, preguntas de consolidación | Agente + yo |
 
 Tras la aprobación de la compuerta y de la spec, el agente avanza de forma autónoma por las etapas 4 a 10, deteniéndose solo ante un bloqueo, un fallo que no puede resolver o una decisión Tipo 1 imprevista.
 
@@ -838,7 +838,7 @@ Una tarea es `DONE` solo si:
 - La documentación (y el README si aplica) está actualizada.
 - No se introdujo regresión.
 - El backlog y las decisiones (4.4) están registrados.
-- El PR está abierto, con CI en verde, y mergeado conforme a 2.3.
+- El cambio está integrado en `main` (push directo o PR mergeado), con CI en verde, conforme a 2.3.
 - Se hicieron las preguntas de consolidación.
 
 ### El MVP está completo solo si se demuestra:
