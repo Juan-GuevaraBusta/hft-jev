@@ -1,6 +1,6 @@
 # ADR-007: Cinco agentes LLM, respuestas grabadas fuera de la demo y cuota agotada a la DLQ
 
-- **Estado:** Aceptado
+- **Estado:** Aceptado; decisión 5 modificada por [ADR-010](./ADR-010-lambda-reenvio-cuota.md) (2026-10-13)
 - **Fecha:** 2026-10-13
 - **Decisor:** Juan Guevara Bustamante (elección explícita de la opción C en el debate M0-05)
 - **Tradeoffs:** T-010 (antes T-108); T-112 sigue abierto en los IDs de modelo

@@ -28,11 +28,11 @@ GitHub: milestones **M0–M6** creados; épicas y sub-issues en [manifest](./git
 - **Agentes y cuota LLM:** 5 agentes LLM; respuestas grabadas fuera de la demo; sin saldo en OpenRouter (50 peticiones/día); cuota agotada a la DLQ y reanudación — [ADR-007](../docs/architecture-decisions/ADR-007-cinco-agentes-llm-cuota-openrouter.md) (2026-10-13).
 - **IaC y despliegue:** Terraform; todo en Floci también en desarrollo (SQS + DLQ, S3, RDS, worker en ECS Fargate); sustituye parte de ADR-005 — [ADR-008](../docs/architecture-decisions/ADR-008-terraform-todo-en-floci.md) (2026-10-13).
 - **Frontend:** vinext 1.1, solo local; sin Cloudflare en el MVP — [ADR-009](../docs/architecture-decisions/ADR-009-frontend-vinext-local.md) (2026-10-13).
+- **Lambda:** solo para reanudar investigaciones paradas por cuota (cola `quota-wait` + Scheduler puntual + Lambda) — [ADR-010](../docs/architecture-decisions/ADR-010-lambda-reenvio-cuota.md) (2026-10-13).
 - **Plazo:** demo M0–M6 en menos de 2 semanas. Decisión del usuario, riesgo aceptado: demo incompleta o con piezas sin pulir (2026-10-13).
 
 ### Pendientes (no cerradas)
 
-- Lambda en el MVP (T-103).
 - Spike OpenRouter free: IDs de modelo por tier, si el límite diario es por cuenta y a qué hora se restablece (corto: 50 peticiones/día).
 - Jev (TypeSafe AI): opcional tras verificar API.
 
