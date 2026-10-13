@@ -24,11 +24,11 @@ GitHub: milestones **M0–M6** creados; épicas y sub-issues en [manifest](./git
 - **LLM + observabilidad (nube):** OpenRouter + LangSmith Cloud + Langfuse Cloud — [ADR-001](../docs/architecture-decisions/ADR-001-llm-openrouter-observability-cloud.md) (2026-10-09).
 - **`decision_score`, umbrales y límites de riesgo:** requisitos duros + suma ponderada versionada, umbrales 0.40 / 0.75 en paper, seguimiento en sombra, límites porcentuales, criterio de calibración para `live` — [ADR-004](../docs/architecture-decisions/ADR-004-decision-score-umbrales-limites-riesgo.md) (2026-10-13).
 - **Floci y cómputo:** Floci ligero (SQS + DLQ + S3); PostgreSQL y worker como contenedores de Compose; ECS/Fargate y RDS solo en diseño e IaC — [ADR-005](../docs/architecture-decisions/ADR-005-floci-ligero-servicios-y-computo.md) (2026-10-13).
+- **Ejecución de investigaciones:** SQS + worker con checkpointing de LangGraph en PostgreSQL; 3 intentos antes de la DLQ — [ADR-006](../docs/architecture-decisions/ADR-006-cola-sqs-worker-checkpointing.md) (2026-10-13).
 - **Plazo:** demo M0–M6 en menos de 2 semanas. Decisión del usuario, riesgo aceptado: demo incompleta o con piezas sin pulir (2026-10-13).
 
 ### Pendientes (no cerradas)
 
-- Cola + worker vs alternativa más simple para MVP (T-105; el usuario pide paralelismo y reintento automático).
 - Lambda en el MVP (T-103).
 - Cantidad de agentes vs funciones deterministas.
 - Spike OpenRouter free: modelos, límites y privacidad (ejecución pendiente).
