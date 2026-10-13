@@ -22,6 +22,7 @@ GitHub: milestones **M0–M6** creados; épicas y sub-issues en [manifest](./git
 ### Cerradas (ADR)
 
 - **LLM + observabilidad (nube):** OpenRouter + LangSmith Cloud + Langfuse Cloud — [ADR-001](../docs/architecture-decisions/ADR-001-llm-openrouter-observability-cloud.md) (2026-10-09).
+- **`decision_score`, umbrales y límites de riesgo:** requisitos duros + suma ponderada versionada, umbrales 0.40 / 0.75 en paper, seguimiento en sombra, límites porcentuales, criterio de calibración para `live` — [ADR-004](../docs/architecture-decisions/ADR-004-decision-score-umbrales-limites-riesgo.md) (2026-10-13).
 
 ### Pendientes (no cerradas)
 

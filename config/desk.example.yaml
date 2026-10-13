@@ -39,9 +39,10 @@ desk_limits:
 
 # Money rules — usadas por Deterministic Gate; nunca inferir de trades pasados
 money_rules:
-  minimum_cash_reserve_usd: null  # NEEDS_DATA si null y el gate requiere caja
-  max_single_name_exposure_pct: null  # p. ej. 0.05 = 5% del portfolio
-  max_new_order_usd: null
+  # Porcentajes como fracción del capital de la cuenta (ADR-004): 0.05 = 5%
+  minimum_cash_reserve_pct: 0.20  # NEEDS_DATA si null y el gate requiere caja
+  max_single_name_exposure_pct: 0.05
+  max_new_order_pct: 0.02
   investment_horizon: null  # p. ej. "12-24 months"
   # Fixture de cartera para tests; en integración y demo la cartera sale de la cuenta paper de Alpaca
   portfolio_fixture_path: null  # p. ej. "fixtures/portfolio.demo.json"
@@ -73,9 +74,11 @@ execution:
   mode: paper  # paper | live. Si falta o es ambiguo, se usa paper. live exige interruptor explícito.
   kill_switch: false  # true bloquea todo envío de órdenes
   ticket_default: "NO_TICKET"  # cuando el gate no devuelve PASS
-  # Umbrales de decision_score (0-1). null = sin definir: el ExecutionPort falla cerrado.
-  reject_threshold: null
-  auto_threshold: null  # en live, el envío automático queda desactivado hasta calibrar
+  # Umbrales de decision_score (0-1, ADR-004). null = sin definir: el ExecutionPort falla cerrado.
+  score_version: "1"
+  reject_threshold: 0.40
+  auto_threshold: 0.75  # en live, el envío automático queda desactivado hasta calibrar
+  shadow_tracking: true  # registra las órdenes rechazadas sin enviarlas, para calibrar
   # Límites de riesgo deterministas; se suman a money_rules
-  max_daily_loss_usd: null
-  max_orders_per_day: null
+  max_daily_loss_pct: 0.01  # al alcanzarse, kill switch hasta la siguiente sesión
+  max_orders_per_day: 5
