@@ -54,6 +54,12 @@ GitHub: milestones **M0–M6** creados; épicas y sub-issues en [manifest](./git
 | M0-08 | ADRs iniciales (plantilla + primeros temas cerrados) | TODO | M | [#38](https://github.com/Juan-GuevaraBusta/hft-jev/issues/38) |
 | M0-09 | Contrato desk: `prompts/`, `config/desk.example.yaml`, extracto fuentes, ADR-002 (Propuesto), delta §5/§9 | DONE | M | 2026-10-12 |
 
+### M1 — Corte vertical determinista
+
+| ID | Título | Estado | Complejidad | Notas |
+|----|--------|--------|-------------|-------|
+| M1-T01 | Modelos Pydantic de dominio y ResearchArtifact v1 | DONE | M | [#47](https://github.com/Juan-GuevaraBusta/hft-jev/issues/47) — commit `0ed7ea5`, rama `feat/m1-t01-domain-models`, 2026-10-14 |
+
 ### Plantilla de tarea (futuras entradas)
 
 ```text
