@@ -1,4 +1,4 @@
-.PHONY: help setup lint format typecheck test test-unit
+.PHONY: help setup lint format typecheck test test-unit trace-smoke
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -24,3 +24,6 @@ test: ## Run unit tests with coverage
 
 test-unit: ## Run unit tests only
 	uv run pytest -m unit
+
+trace-smoke: ## Send one synthetic trace to Langfuse via OpenRouter (needs .env)
+	uv run python -m hft_jev.observability.smoke
