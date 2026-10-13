@@ -30,6 +30,7 @@ GitHub: milestones **M0–M6** creados; épicas y sub-issues en [manifest](./git
 - **Frontend:** vinext 1.1, solo local; sin Cloudflare en el MVP — [ADR-009](../docs/architecture-decisions/ADR-009-frontend-vinext-local.md) (2026-10-13).
 - **Lambda:** solo para reanudar investigaciones paradas por cuota (cola `quota-wait` + Scheduler puntual + Lambda) — [ADR-010](../docs/architecture-decisions/ADR-010-lambda-reenvio-cuota.md) (2026-10-13).
 - **Veredictos del gate:** PASS, FLAG (aprobación humana si score ≥ 0.40), BLOCK, NEEDS_DATA (espera automática hasta 24 h); enmienda ADR-004 — [ADR-011](../docs/architecture-decisions/ADR-011-veredictos-gate.md) (2026-10-13).
+- **Turnos y disparo:** night_ingest + morning_desk en el MVP; solo 8-K/10-Q/10-K; máximo 3 al día; "reprocesar filing" para la demo — [ADR-012](../docs/architecture-decisions/ADR-012-turnos-y-disparo-por-filings.md) (2026-10-13).
 - **Plazo:** demo M0–M6 en menos de 2 semanas. Decisión del usuario, riesgo aceptado: demo incompleta o con piezas sin pulir (2026-10-13).
 
 ### Pendientes (no cerradas)
