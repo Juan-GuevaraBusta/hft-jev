@@ -61,6 +61,12 @@
       "skillPath": "skills/hosted-agents/SKILL.md",
       "computedHash": "72b033056feb3cb3c8cda095864ecc436b6b3b5876cb50183034d4c84b8110a6"
     },
+    "langfuse": {
+      "source": "langfuse/skills",
+      "sourceType": "github",
+      "skillPath": "skills/langfuse/SKILL.md",
+      "computedHash": "14afde211553546dc280bbdd25feff7d20b64b17f7c5d0976db192f5998b3709"
+    },
     "langsmith-custom-apps": {
       "source": "langchain-ai/langsmith-skills",
       "sourceType": "github",
@@ -108,6 +114,12 @@
       "sourceType": "github",
       "skillPath": "skills/memory-systems/SKILL.md",
       "computedHash": "7dc4a0ba6456e277660ab93892fe3fbfe05c80cfbbea637ea23bbc5a4810703f"
+    },
+    "migrate-to-langfuse": {
+      "source": "langfuse/skills",
+      "sourceType": "github",
+      "skillPath": "skills/migrate-to-langfuse/SKILL.md",
+      "computedHash": "6c0bc44334e5d5d13afff4ae5b1c6ceb6cf153f006253c81c02524f1c584ca8b"
     },
     "multi-agent-patterns": {
       "source": "muratcankoylan/Agent-Skills-for-Context-Engineering",
