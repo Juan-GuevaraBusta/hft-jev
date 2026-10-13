@@ -1,6 +1,6 @@
 # ADR-004: Fórmula de `decision_score`, umbrales y límites de riesgo
 
-- **Estado:** Aceptado
+- **Estado:** Aceptado; requisito duro del gate modificado por [ADR-011](./ADR-011-veredictos-gate.md) (2026-10-13)
 - **Fecha:** 2026-10-13
 - **Decisor:** Juan Guevara Bustamante (aprobación explícita en chat de sesión)
 - **Relacionado:** [ADR-003](./ADR-003-broker-alpaca-ejecucion-por-umbrales.md), `master_prompt.md` §5.1 y §10, issue [#24](https://github.com/Juan-GuevaraBusta/hft-jev/issues/24) (M0-05)
@@ -27,7 +27,7 @@
 
 **Requisitos duros.** Si cualquiera falla, `decision_score = 0` y no se propone orden:
 
-- Veredicto del Deterministic Gate = `PASS`.
+- Veredicto del Deterministic Gate ∈ {`PASS`, `FLAG`} ([ADR-011](./ADR-011-veredictos-gate.md): `FLAG` nunca se envía automático; con score ≥ 0.40 va a aprobación humana).
 - Señal del Event Analyst = `CONFIRMED`.
 - Cero contradicciones materiales sin resolver.
 - Datos dentro de `money_rules.staleness_hours`.
