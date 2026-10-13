@@ -16,17 +16,17 @@ universe:
 
 benchmark: "SPY"
 
-# Turnos 24/7 — fuera del primer corte vertical; cron/worker los usará después
+# Turnos 24/7 — cron/worker los usará después (M2+); este archivo solo valida forma
 schedule:
   night_ingest:
-    enabled: false
+    enabled: true
     # Lunes–viernes, ventana orientativa post-cierre (ET)
     cron: "30 16 * * 1-5"
     tasks:
       - sec_filings
       - earnings_calendar
   morning_desk:
-    enabled: false
+    enabled: true
     local_time: "09:00"
     combine_night_intel: true
 

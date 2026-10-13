@@ -9,7 +9,9 @@ dependencies = [
     "langchain>=1.4.5",
     "langchain-openrouter>=0.2.9",
     "langfuse>=4.17.0",
+    "pydantic>=2.12",
     "python-dotenv>=1.2.4",
+    "pyyaml>=6.0",
 ]
 
 [dependency-groups]
