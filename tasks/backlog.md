@@ -25,13 +25,13 @@ GitHub: milestones **M0–M6** creados; épicas y sub-issues en [manifest](./git
 - **`decision_score`, umbrales y límites de riesgo:** requisitos duros + suma ponderada versionada, umbrales 0.40 / 0.75 en paper, seguimiento en sombra, límites porcentuales, criterio de calibración para `live` — [ADR-004](../docs/architecture-decisions/ADR-004-decision-score-umbrales-limites-riesgo.md) (2026-10-13).
 - **Floci y cómputo:** Floci ligero (SQS + DLQ + S3); PostgreSQL y worker como contenedores de Compose; ECS/Fargate y RDS solo en diseño e IaC — [ADR-005](../docs/architecture-decisions/ADR-005-floci-ligero-servicios-y-computo.md) (2026-10-13).
 - **Ejecución de investigaciones:** SQS + worker con checkpointing de LangGraph en PostgreSQL; 3 intentos antes de la DLQ — [ADR-006](../docs/architecture-decisions/ADR-006-cola-sqs-worker-checkpointing.md) (2026-10-13).
+- **Agentes y cuota LLM:** 5 agentes LLM; respuestas grabadas fuera de la demo; sin saldo en OpenRouter (50 peticiones/día); cuota agotada a la DLQ y reanudación — [ADR-007](../docs/architecture-decisions/ADR-007-cinco-agentes-llm-cuota-openrouter.md) (2026-10-13).
 - **Plazo:** demo M0–M6 en menos de 2 semanas. Decisión del usuario, riesgo aceptado: demo incompleta o con piezas sin pulir (2026-10-13).
 
 ### Pendientes (no cerradas)
 
 - Lambda en el MVP (T-103).
-- Cantidad de agentes vs funciones deterministas.
-- Spike OpenRouter free: modelos, límites y privacidad (ejecución pendiente).
+- Spike OpenRouter free: IDs de modelo por tier, si el límite diario es por cuenta y a qué hora se restablece (corto: 50 peticiones/día).
 - Frontend: vinext vs alternativas; Cloudflare (descartado / opcional / solo local).
 - Herramienta IaC (Pulumi, Terraform, CDK, etc.) compatible con Floci.
 - Jev (TypeSafe AI): opcional tras verificar API.
