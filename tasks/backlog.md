@@ -45,7 +45,7 @@ GitHub: milestones **M0–M6** creados; épicas y sub-issues en [manifest](./git
 | M0-04 | Verificación docs: Floci, LangSmith, Langfuse, LangGraph, vinext, IaC, Jev | DONE | M | `docs/verification-fase-a-official-sources.md` (PR-003) |
 | M0-05 | Debates Tipo 1 + orden aprobado | TODO | L | [#24](https://github.com/Juan-GuevaraBusta/hft-jev/issues/24) |
 | M0-06 | Plan MVP + roadmap PRs (3 entregas) | TODO | L | [#37](https://github.com/Juan-GuevaraBusta/hft-jev/issues/37) |
-| M0-07 | `pyproject.toml`, Ruff, pytest, Makefile mínimo | TODO | M | [#46](https://github.com/Juan-GuevaraBusta/hft-jev/issues/46) |
+| M0-07 | `pyproject.toml`, Ruff, pytest, Makefile mínimo | DONE | M | [#46](https://github.com/Juan-GuevaraBusta/hft-jev/issues/46) — commit `f34051e`, 2026-10-13 |
 | M0-08 | ADRs iniciales (plantilla + primeros temas cerrados) | TODO | M | [#38](https://github.com/Juan-GuevaraBusta/hft-jev/issues/38) |
 | M0-09 | Contrato desk: `prompts/`, `config/desk.example.yaml`, extracto fuentes, ADR-002 (Propuesto), delta §5/§9 | DONE | M | 2026-10-12 |
 
