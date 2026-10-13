@@ -9,6 +9,7 @@ Plataforma de investigación de inversiones **AI-native** (demostración de inge
 | Repositorio GitHub | **Implementado** — [Juan-GuevaraBusta/hft-jev](https://github.com/Juan-GuevaraBusta/hft-jev) |
 | `master_prompt.md` + skills de agente | **Implementado** — contrato de trabajo del proyecto |
 | README, `.gitignore`, backlog | **Implementado** — PR #2 |
+| Tooling Python: `pyproject.toml`, uv, Ruff, mypy strict, pytest | **Implementado** — M0-07 [#46](https://github.com/Juan-GuevaraBusta/hft-jev/issues/46) |
 | Verificación Fase A (docs oficiales) | **Implementado** — `docs/verification-fase-a-official-sources.md` |
 | Backend, API, worker, LangGraph | **Planificado** — Fase B+ |
 | Frontend (Next.js / vinext) | **Planificado** — debate Tipo 1 pendiente |
@@ -23,14 +24,25 @@ Plataforma de investigación de inversiones **AI-native** (demostración de inge
 - **Fase A (plan):** en curso — diagnóstico de entorno, verificación de documentación, debates Tipo 1, roadmap de PRs.
 - **Fases B–E:** implementación por PRs pequeños, cada uno con compuerta de comprensión (`APRUEBO <PR-ID>`).
 
-## Cómo clonar
+## Cómo ejecutar
+
+Requisito: [`uv`](https://docs.astral.sh/uv/) (instalación: `curl -LsSf https://astral.sh/uv/install.sh | sh`).
 
 ```bash
 git clone https://github.com/Juan-GuevaraBusta/hft-jev.git
 cd hft-jev
+
+make setup          # crea .venv, instala dependencias (uv sync)
+make lint           # ruff check + ruff format --check
+make format         # ruff auto-fix + format
+make typecheck      # mypy --strict
+make test           # pytest con cobertura (solo tests unit)
+make test-unit      # pytest solo tests unit
+
+make help           # lista todos los targets
 ```
 
-No hay aún `make setup` ni `compose.yaml`. Se añadirán cuando exista el primer stack acordado.
+Todo comando mostrado fue verificado en macOS Apple Silicon con Python 3.12.
 
 ## Documentación de referencia
 
