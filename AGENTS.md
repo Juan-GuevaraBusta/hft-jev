@@ -12,6 +12,16 @@ Detalle en la sección 2.10 de [`master_prompt.md`](./master_prompt.md). Tras **
 4. El autor del commit es únicamente el usuario con su cuenta de GitHub: sin trailers `Co-authored-by` ni otra atribución a agentes.
 5. Push directo a `main` permitido: proyecto de un solo desarrollador. Nunca uses `git reset --hard` ni force-push sin confirmación explícita (ver 2.3).
 
+## Prompts con varios subagentes: cada uno commitea y pushea a `main`
+
+Detalle en la sección 2.11 de [`master_prompt.md`](./master_prompt.md). Cuando un prompt reparte trabajo entre varios subagentes:
+
+1. Cada subagente aplica las reglas anteriores a su propia parte: testea, y si pasa, commitea y pushea a `main` al terminar cada unidad de trabajo. No espera al final del prompt.
+2. **Commits atómicos:** un cambio lógico por commit, con Conventional Commits (`tipo(alcance): resumen` en imperativo, máximo 72 caracteres) y una referencia al issue en el cuerpo (`Refs #<n>`).
+3. **Solo lo propio:** cada subagente añade al staging únicamente los archivos de su parte (`git add <rutas>`, nunca `git add -A` ni `git add .`).
+4. **Antes de cada push:** `git pull --rebase origin main`, vuelve a ejecutar los checks si entraron cambios ajenos y luego pushea. Si hay conflicto, lo resuelve sin descartar trabajo ajeno, o se detiene y lo reporta.
+5. El agente orquestador asigna archivos o carpetas sin solapamiento entre subagentes y, al final, verifica que `main` quede en verde.
+
 ## Registro de tradeoffs de arquitectura
 
 Después de responder **cualquier pregunta sobre arquitectura** (servicios AWS/Floci, cómputo, cola/worker, LLM, observabilidad, base de datos, IaC, frontend, contratos, etc.), actualiza [`docs/architecture-decisions/tradeoffs.md`](./docs/architecture-decisions/tradeoffs.md):

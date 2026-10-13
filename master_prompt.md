@@ -119,6 +119,17 @@ Cada operación que modifique el repositorio (código, tests, configuración, in
 4. **Autoría:** el único autor del commit es el usuario con su cuenta de GitHub. Sin trailers `Co-authored-by` ni atribución a agentes.
 5. Esta regla no relaja 2.2 ni 2.3: no se escribe código antes de la compuerta, y las acciones destructivas (force-push, reescribir historial, `git reset --hard`) siguen requiriendo mi confirmación explícita.
 
+### 2.11 Varios subagentes: cada uno commitea y pushea a `main`
+
+Cuando un prompt reparte trabajo entre varios subagentes, cada uno aplica 2.10 a su parte, con estas buenas prácticas:
+
+1. **Push incremental:** cada subagente commitea y pushea a `main` al terminar cada unidad de trabajo verificada, sin esperar a que termine todo el prompt.
+2. **Commits atómicos:** un cambio lógico por commit. Mensaje en Conventional Commits (`tipo(alcance): resumen` en imperativo, máximo 72 caracteres), cuerpo con el porqué y `Refs #<issue>`. Sin commits de "WIP" ni mezclas de cambios no relacionados.
+3. **Staging explícito:** cada subagente añade solo sus archivos (`git add <rutas>`); nunca `git add -A` ni `git add .`, para no commitear trabajo de otro subagente.
+4. **Sincronización antes del push:** `git pull --rebase origin main`; si entraron cambios ajenos, vuelve a ejecutar los checks relevantes antes de pushear. Ante un conflicto, resuélvelo sin descartar trabajo ajeno o detente y repórtalo. Nunca force-push.
+5. **Orquestación:** el agente principal asigna a cada subagente archivos o carpetas sin solapamiento, y al cerrar el prompt verifica que `main` quede en verde (tests, lint y typecheck) y reporta los hashes de todos los commits.
+6. La autoría sigue 2.10: solo el usuario, sin atribución a agentes.
+
 ---
 
 ## 3. PROTOCOLO DE PULL REQUESTS
