@@ -1,6 +1,6 @@
 # ADR-005: Floci ligero (SQS + DLQ + S3); PostgreSQL y worker como contenedores de Compose
 
-- **Estado:** Aceptado
+- **Estado:** Aceptado; decisiones 2, 3 y 4 sustituidas por [ADR-008](./ADR-008-terraform-todo-en-floci.md) (2026-10-13)
 - **Fecha:** 2026-10-13
 - **Decisor:** Juan Guevara Bustamante (elección explícita de la opción A en el debate M0-05)
 - **Tradeoffs:** T-007 (antes T-101), T-008 (antes T-102)
