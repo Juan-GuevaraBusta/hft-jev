@@ -58,6 +58,10 @@ python_version = "3.12"
 mypy_path = "backend/src"
 files = ["backend/src", "backend/tests"]
 
+[[tool.mypy.overrides]]
+module = "backend.tests.*"
+disable_error_code = ["no-untyped-def"]
+
 # ---- pytest ----
 [tool.pytest.ini_options]
 testpaths = ["backend/tests"]
